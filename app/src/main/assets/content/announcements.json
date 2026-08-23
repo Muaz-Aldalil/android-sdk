@@ -1,0 +1,50 @@
+﻿[
+  {
+    "id": 1,
+    "type": "live",
+    "title": "البث المباشر — خطبة الجمعة",
+    "description": "الشيخ خالد عثمان الحضري — خطبة الجمعة من مسجد التوبة بأم درمان ، بث مباشر كل جمعة",
+    "date": null,
+    "sheikhId": "khaled-othman-al-hudri",
+    "youtubeVideoId": null,
+    "featured": true,
+    "link": "https://www.youtube.com/channel/UCoj4ymRxoI4hVJPXdhOlgkw/live",
+    "linkLabel": "شاهد البث المباشر"
+  },
+  {
+    "id": 2,
+    "type": "new",
+    "title": "سلسلة: شبهات وردود",
+    "description": "الشيخ الدكتور عبدالحفيظ العدسي — حلقة أسبوعية للرد على الشبهات المعاصرة والأفكار المنحرفة",
+    "date": "2026-08-18",
+    "sheikhId": "abdulhafiz-al-adsi",
+    "youtubeVideoId": null,
+    "featured": false,
+    "link": "/sheikhs/abdulhafiz-al-adsi",
+    "linkLabel": "صفحة الشيخ"
+  },
+  {
+    "id": 3,
+    "type": "event",
+    "title": "مسابقة شهرية في القرآن الكريم",
+    "description": "شارك في مسابقتنا الشهرية وتحصل على شهادة تقديرية — أسئلة في التلاوة والتجويد والتفسير",
+    "date": "2026-09-01",
+    "sheikhId": null,
+    "youtubeVideoId": null,
+    "featured": false,
+    "link": "/interactive",
+    "linkLabel": "شارك الآن"
+  },
+  {
+    "id": 4,
+    "type": "upcoming",
+    "title": "دورات محاضرات أسبوعية",
+    "description": "محاضرات دينية متنوعة مع نخبة من العلماء كل أسبوع يوم الجمعة — العقيدة والسيرة النبوية والفقه",
+    "date": "2026-08-22",
+    "sheikhId": null,
+    "youtubeVideoId": null,
+    "featured": false,
+    "link": "/lectures",
+    "linkLabel": "تصفح الدروس"
+  }
+]

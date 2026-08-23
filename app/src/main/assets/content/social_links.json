@@ -1,0 +1,17 @@
+﻿{
+  "socialLinks": [
+    { "label": "يوتيوب", "href": "https://www.youtube.com/@Subul_Alhuda", "iconKey": "youtube" },
+    { "label": "فيسبوك", "href": "https://www.facebook.com/subulalhudatv", "iconKey": "facebook" },
+    { "label": "تيك توك", "href": "https://www.tiktok.com/@subulalhudatv", "iconKey": "tiktok" },
+    { "label": "تيليجرام", "href": "https://t.me/subulalhuda", "iconKey": "telegram" }
+  ],
+  "contactInfo": {
+    "phone": "01119453109",
+    "location": "أم درمان — السودان",
+    "youtube": "https://www.youtube.com/@Subul_Alhuda",
+    "facebook": "https://www.facebook.com/subulalhudatv",
+    "facebook2": "https://www.facebook.com/100071043051986",
+    "telegram": "https://t.me/subulalhuda",
+    "tiktok": "https://www.tiktok.com/@subulalhudatv"
+  }
+}

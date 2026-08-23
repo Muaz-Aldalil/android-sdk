@@ -1,0 +1,11 @@
+﻿[
+  { "id": "all", "label": "الكل" },
+  { "id": "khutbah", "label": "خطب الجمعة" },
+  { "id": "lectures", "label": "محاضرات" },
+  { "id": "lessons", "label": "دروس علمية" },
+  { "id": "maqamat", "label": "مقامات وابتهالات" },
+  { "id": "tafsir", "label": "تفسير" },
+  { "id": "refutations", "label": "شبهات وردود" },
+  { "id": "fatawa", "label": "فتاوى" },
+  { "id": "clips", "label": "مقاطع قصيرة" }
+]

@@ -1,0 +1,33 @@
+# Built files
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+*.apk
+*.aab
+*.ap_
+*.aab
+*.jks
+*.keystore
+app/build/
+
+# Gradle wrapper jar (regenerated)
+# gradle/wrapper/gradle-wrapper.jar
+
+# Kotlin
+*.kotlin_module
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Secrets — never commit
+*.env
+secrets.properties
+google-services.json

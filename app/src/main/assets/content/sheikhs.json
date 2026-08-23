@@ -1,0 +1,194 @@
+[
+  {
+    "id": "mohamed-al-mujtaba",
+    "name": "الشيخ محمد المجتبى",
+    "bio": "خطيب مسجد التوبة بأم درمان — خطب الجمعة والمحاضرات والمقاطع المتنوعة",
+    "avatar": "https://img.youtube.com/vi/nO3bP4FHlxQ/mqdefault.jpg",
+    "lectureCount": 200,
+    "videoIds": [
+      "nO3bP4FHlxQ",
+      "1ApUiDx50fA",
+      "lw7GXsH0r2g",
+      "hfflSPH6bqc",
+      "gyIIFqzYsOg",
+      "LQj7OsUPpeY"
+    ]
+  },
+  {
+    "id": "mohamed-abdulrahim",
+    "name": "الشيخ الدكتور محمد عبدالرحيم الحاج",
+    "bio": "محاضرات في الحديث والسيرة النبوية والتثقيف الديني",
+    "avatar": "https://img.youtube.com/vi/H1-7OFUB_1k/mqdefault.jpg",
+    "lectureCount": 50,
+    "videoIds": [
+      "H1-7OFUB_1k",
+      "mOUjngzSGg4"
+    ]
+  },
+  {
+    "id": "kamal-al-din-zanati",
+    "name": "الشيخ كمال الدين الزنادي",
+    "bio": "قصص ومقاطع دعوية مؤثرة",
+    "avatar": "https://img.youtube.com/vi/9TdCRWn0hoc/mqdefault.jpg",
+    "lectureCount": 30,
+    "videoIds": [
+      "9TdCRWn0hoc"
+    ]
+  },
+  {
+    "id": "hussam-al-din-ziyad",
+    "name": "الشيخ حسام الدين الزيات",
+    "bio": "مقاطع قصيرة في القضايا المعاصرة والدعوة الإسلامية",
+    "avatar": "https://img.youtube.com/vi/CxrPwU_ZHiM/mqdefault.jpg",
+    "lectureCount": 20,
+    "videoIds": [
+      "CxrPwU_ZHiM",
+      "DWc0dgXn1gw"
+    ]
+  },
+  {
+    "id": "ibrahim-mirghani",
+    "name": "الشيخ إبراهيم ميرغني",
+    "bio": "مقاطع قصيرة عن الفرح والتوكل على الله",
+    "avatar": "https://img.youtube.com/vi/Q6EZ-G9gh0s/mqdefault.jpg",
+    "lectureCount": 15,
+    "videoIds": [
+      "Q6EZ-G9gh0s",
+      "vigl4oPbaAw",
+      "Y-ZmAKDTlNI",
+      "lxxonNvr0Bk",
+      "zx0TqakfdNQ",
+      "j6peEfDvB50",
+      "rhRDmfE0N40",
+      "U2qnpV1OY5M",
+      "XVZm65E976I",
+      "oIlalThGVnY"
+    ]
+  },
+  {
+    "id": "ibrahim-abdul-mutalib",
+    "name": "الشيخ الدكتور إبراهيم عبد المطلب",
+    "bio": "مقامات المسجد وعبادة الله",
+    "avatar": "https://img.youtube.com/vi/Y6Y0UOkma8Y/mqdefault.jpg",
+    "lectureCount": 20,
+    "videoIds": [
+      "Y6Y0UOkma8Y",
+      "FUyd356hZ-g",
+      "EJG3S3hQ36w",
+      "5GXhrSGjYh0",
+      "hw2WKR_bbU4",
+      "bJbchESU4eg",
+      "tTnTRGBTFDM",
+      "AOXzQg0QV_Y"
+    ]
+  },
+  {
+    "id": "abdul-aziz-al-jili",
+    "name": "الشيخ عبد العزيز الجيلي",
+    "bio": "القضية الأساسية التي يبنى عليها الدين",
+    "avatar": "https://img.youtube.com/vi/KGvKAyY3RuA/mqdefault.jpg",
+    "lectureCount": 25,
+    "videoIds": [
+      "KGvKAyY3RuA",
+      "SXQZttWJUdY"
+    ]
+  },
+  {
+    "id": "abdulrahman-koudi",
+    "name": "الشيخ الدكتور عبد الرحمن موسى كودي",
+    "bio": "دروس في الغصص والقصص والوسطية في الدين",
+    "avatar": "https://img.youtube.com/vi/Cfk7nR0kefM/mqdefault.jpg",
+    "lectureCount": 20,
+    "videoIds": [
+      "Cfk7nR0kefM"
+    ]
+  },
+  {
+    "id": "khaled-abdullatif",
+    "name": "الشيخ الدكتور خالد عبداللطيف محمدنور",
+    "bio": "التحذير من أهل البدع ونصائح للشباب",
+    "avatar": "https://img.youtube.com/vi/u3eOUVXbbBQ/mqdefault.jpg",
+    "lectureCount": 30,
+    "videoIds": [
+      "u3eOUVXbbBQ",
+      "Se6sRCLvtag",
+      "-utaVYW_t00"
+    ]
+  },
+  {
+    "id": "abdulhafiz-al-adsi",
+    "name": "الشيخ الدكتور عبدالحفيظ العدسي",
+    "bio": "محاضرات ودروس متعددة في القضايا المعاصرة",
+    "avatar": "https://img.youtube.com/vi/hUW--112VRc/mqdefault.jpg",
+    "lectureCount": 40,
+    "videoIds": [
+      "hUW--112VRc",
+      "wwrarSnPN50",
+      "zx5BF_EhzEg",
+      "DA9hk0nYRA8",
+      "vC4DFzyHI7U",
+      "RR5ZKiLIGjU",
+      "o41Vu9nmB0A",
+      "6DiN0ofWmSg",
+      "Rd1_Dr1SARw",
+      "nlZa-Im1304"
+    ]
+  },
+  {
+    "id": "mohamed-sayed-hajj",
+    "name": "الشيخ محمد سيد حاج — رحمه الله",
+    "bio": "دروس في الترغيب والترهيب التربية الإيمانية للصحابة",
+    "avatar": "https://img.youtube.com/vi/HH449pLGg2s/mqdefault.jpg",
+    "lectureCount": 35,
+    "videoIds": [
+      "HH449pLGg2s",
+      "lHmopfKhk8o",
+      "TNj-WwJvZWA",
+      "QQUhf_HmfVU"
+    ]
+  },
+  {
+    "id": "hasan-hassanallah",
+    "name": "الشيخ الدكتور حسن حسب الله",
+    "bio": "مقاطع قصيرة في القضايا المعاصرة",
+    "avatar": "https://img.youtube.com/vi/y56CP3MLf8Q/mqdefault.jpg",
+    "lectureCount": 15,
+    "videoIds": [
+      "y56CP3MLf8Q"
+    ]
+  },
+  {
+    "id": "khaled-othman-al-hudri",
+    "name": "الشيخ خالد عثمان الحضري",
+    "bio": "خطيب وداعية سوداني — خطب الجمعة والمحاضرات والدروس المتنوعة في المسجد والأماكن العامة",
+    "avatar": "https://img.youtube.com/vi/pbZv-f4b--s/mqdefault.jpg",
+    "lectureCount": 30,
+    "videoIds": [
+      "pbZv-f4b--s",
+      "sQ3dJRBbsPw",
+      "Ur7CBc1RbEU"
+    ]
+  },
+  {
+    "id": "al-zain-yusuf",
+    "name": "الشيخ الدكتور الزين يوسف زين العابدين",
+    "bio": "محاضرات في التوحيد والعقيدة الصحيحة والقضايا المعاصرة",
+    "avatar": "https://img.youtube.com/vi/Wtcifn--02E/mqdefault.jpg",
+    "lectureCount": 10,
+    "videoIds": [
+      "Wtcifn--02E"
+    ]
+  },
+  {
+    "id": "khdr-tayallah",
+    "name": "الشيخ خضر تاي الله",
+    "bio": "تلاوات قرآنية خاشعة وحلقات دعوية وقصص من السودان",
+    "avatar": "https://img.youtube.com/vi/58Qngu_TOKI/mqdefault.jpg",
+    "lectureCount": 10,
+    "videoIds": [
+      "58Qngu_TOKI",
+      "T-FUMMqJZTo",
+      "44mU12RMwwE"
+    ]
+  }
+]
