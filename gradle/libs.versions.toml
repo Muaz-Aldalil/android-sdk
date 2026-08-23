@@ -2,7 +2,7 @@
 agp = "9.3.0"
 kotlin = "2.3.21"
 coreKtx = "1.17.0"
-lifecycleRuntimeKtx = "2.10.1"
+lifecycleRuntimeKtx = "2.9.4"
 activityCompose = "1.13.0"
 composeBom = "2026.06.01"
 navigationCompose = "2.9.8"
