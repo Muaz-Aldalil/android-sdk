@@ -1,6 +1,5 @@
 package com.subulalhuda
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,11 +23,10 @@ class MainActivity : ComponentActivity() {
             val context = LocalContext.current
             val contentRepository = remember { ContentRepository(context) }
 
-            // TODO: Replace with actual API key from BuildConfig
+            // YouTube API key from BuildConfig (set in local.properties via build.gradle.kts)
             // Must be a SEPARATE key from the website's VITE_YOUTUBE_API_KEY
             val youtubeRepository = remember {
-                val prefs = context.getSharedPreferences("subul_prefs", Context.MODE_PRIVATE)
-                val apiKey = prefs.getString("youtube_api_key", "") ?: ""
+                val apiKey = BuildConfig.YOUTUBE_API_KEY
                 if (apiKey.isNotBlank()) {
                     YouTubeRepository(context, apiKey, "UCoj4ymRxoI4hVJPXdhOlgkw")
                 } else {

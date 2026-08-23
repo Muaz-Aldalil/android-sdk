@@ -31,6 +31,7 @@ import coil.compose.AsyncImage
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import com.subulalhuda.BuildConfig
 import com.subulalhuda.data.remote.PlaylistItem
 import com.subulalhuda.data.remote.VideoItem
 import com.subulalhuda.data.repository.LiveCheckResult
@@ -72,9 +73,9 @@ class YouTubePocActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // TODO: Replace with actual API key from BuildConfig or secure storage
-        // This MUST be a separate key from the website's VITE_YOUTUBE_API_KEY
-        val apiKey = intent.getStringExtra(EXTRA_API_KEY) ?: ""
+        // YouTube API key from BuildConfig (set in local.properties via build.gradle.kts)
+        // Must be a SEPARATE key from the website's VITE_YOUTUBE_API_KEY
+        val apiKey = intent.getStringExtra(EXTRA_API_KEY) ?: BuildConfig.YOUTUBE_API_KEY
         val channelId = intent.getStringExtra(EXTRA_CHANNEL_ID) ?: "UCoj4ymRxoI4hVJPXdhOlgkw"
 
         val repository = YouTubeRepository(applicationContext, apiKey, channelId)

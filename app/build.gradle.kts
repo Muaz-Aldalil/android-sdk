@@ -1,20 +1,34 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
 }
 
 android {
     namespace = "com.subulalhuda"
-    compileSdk = 35
+    compileSdk = 36
+
+    // Read YouTube API key from local.properties (gitignored, never committed)
+    val localProps = java.util.Properties()
+    val localPropsFile = rootProject.file("local.properties")
+    if (localPropsFile.exists()) {
+        localProps.load(localPropsFile.inputStream())
+    }
 
     defaultConfig {
         applicationId = "com.subulalhuda"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0.0"
+
+        // YouTube API key — read from local.properties
+        // Must be a SEPARATE key from the website's VITE_YOUTUBE_API_KEY
+        buildConfigField(
+            "String",
+            "YOUTUBE_API_KEY",
+            "\"${localProps.getProperty("YOUTUBE_API_KEY", "")}\""
+        )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -35,12 +49,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-    }
+    // AGP 9.0+ sets Kotlin JVM target automatically from compileOptions
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
