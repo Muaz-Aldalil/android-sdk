@@ -30,8 +30,15 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
+      - name: Debug gradlew
+        run: |
+          head -1 gradlew
+          file gradlew || true
+          ls -la gradle/wrapper/gradle-wrapper.jar
+          java -version
+
       - name: Build debug APK
-        run: ./gradlew assembleDebug --stacktrace --info
+        run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload APK
         if: success()

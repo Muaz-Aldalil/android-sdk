@@ -1,3 +1,8 @@
 # Force LF for shell scripts (critical for GitHub Actions)
 gradlew text eol=lf
 *.sh text eol=lf
+
+# Binary files — do not touch
+*.jar binary
+*.ttf binary
+*.apk binary
