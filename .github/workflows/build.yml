@@ -27,18 +27,14 @@ jobs:
       - name: Install SDK components
         run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
 
-      - name: Make gradlew executable
-        run: chmod +x gradlew
-
-      - name: Debug gradlew
+      - name: Install Gradle
         run: |
-          head -1 gradlew
-          file gradlew || true
-          ls -la gradle/wrapper/gradle-wrapper.jar
-          java -version
+          curl -sL https://services.gradle.org/distributions/gradle-9.5.0-bin.zip -o /tmp/gradle.zip
+          sudo unzip -q /tmp/gradle.zip -d /opt
+          echo "/opt/gradle-9.5.0/bin" >> $GITHUB_PATH
 
       - name: Build debug APK
-        run: ./gradlew assembleDebug --stacktrace
+        run: gradle assembleDebug --stacktrace
 
       - name: Upload APK
         if: success()
