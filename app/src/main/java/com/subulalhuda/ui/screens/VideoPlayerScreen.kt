@@ -10,10 +10,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -49,23 +49,25 @@ fun VideoPlayerScreen(
                 .padding(padding),
         ) {
             if (playerError != null) {
-                // Fallback
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(16f / 9f)
                         .clickable {
-                            val intent = Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("https://www.youtube.com/watch?v=$videoId")
-                            )
-                            context.startActivity(intent)
+                            try {
+                                context.startActivity(
+                                    Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://www.youtube.com/watch?v=$videoId"),
+                                    ),
+                                )
+                            } catch (_: android.content.ActivityNotFoundException) { }
                         },
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = "اضغط للفتح في يوتيوب",
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             } else {
@@ -77,9 +79,17 @@ fun VideoPlayerScreen(
                                 override fun onReady(youTubePlayer: YouTubePlayer) {
                                     youTubePlayer.loadVideo(videoId, 0f)
                                 }
+
+                                override fun onError(
+                                    youTubePlayer: YouTubePlayer,
+                                    error: PlayerConstants.PlayerError,
+                                ) {
+                                    playerError = error.name
+                                }
                             })
                         }
                     },
+                    onRelease = { view -> view.release() },
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(16f / 9f),

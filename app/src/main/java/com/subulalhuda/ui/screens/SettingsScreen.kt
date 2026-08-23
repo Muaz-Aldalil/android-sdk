@@ -1,13 +1,11 @@
 package com.subulalhuda.ui.screens
 
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -18,11 +16,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
+    isDark: Boolean = false,
+    onThemeChanged: (Boolean) -> Unit = {},
 ) {
-    val context = LocalContext.current
-    val prefs = remember { context.getSharedPreferences("subul_prefs", Context.MODE_PRIVATE) }
-    var isDark by remember { mutableStateOf(prefs.getBoolean("dark_theme", false)) }
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -47,10 +43,7 @@ fun SettingsScreen(
                 trailingContent = {
                     Switch(
                         checked = isDark,
-                        onCheckedChange = {
-                            isDark = it
-                            prefs.edit().putBoolean("dark_theme", it).apply()
-                        },
+                        onCheckedChange = { onThemeChanged(it) },
                     )
                 },
             )

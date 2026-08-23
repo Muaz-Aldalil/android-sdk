@@ -61,7 +61,9 @@ fun ContactScreen(
                         headlineContent = { Text("الهاتف") },
                         supportingContent = { Text(data.contactInfo.phone) },
                         modifier = Modifier.clickable {
-                            context.startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:${data.contactInfo.phone}")))
+                            try {
+                                context.startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:${data.contactInfo.phone}")))
+                            } catch (_: android.content.ActivityNotFoundException) { }
                         },
                     )
                 }
@@ -93,7 +95,9 @@ fun ContactScreen(
                     ListItem(
                         headlineContent = { Text(label) },
                         modifier = Modifier.clickable {
-                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                            try {
+                                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                            } catch (_: android.content.ActivityNotFoundException) { }
                         },
                     )
                 }

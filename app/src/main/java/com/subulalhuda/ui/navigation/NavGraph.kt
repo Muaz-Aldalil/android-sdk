@@ -28,6 +28,8 @@ import com.subulalhuda.ui.screens.*
 fun SubulNavGraph(
     contentRepository: ContentRepository,
     youtubeRepository: YouTubeRepository?,
+    isDark: Boolean = false,
+    onThemeChanged: (Boolean) -> Unit = {},
 ) {
     val navController = rememberNavController()
 
@@ -198,6 +200,8 @@ fun SubulNavGraph(
             composable(Screen.Settings.route) {
                 SettingsScreen(
                     onBack = { navController.popBackStack() },
+                    isDark = isDark,
+                    onThemeChanged = onThemeChanged,
                 )
             }
 

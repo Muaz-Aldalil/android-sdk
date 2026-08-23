@@ -55,22 +55,24 @@ class YouTubeApiClient(
         val request = Request.Builder().url(url).get().build()
         val response = client.newCall(request).execute()
 
-        if (!response.isSuccessful) return null
+        return response.use { resp ->
+            if (!resp.isSuccessful) return@use null
 
-        val body = response.body?.string() ?: return null
-        val channelResponse = json.parseToJsonElement(body)
-        val items = channelResponse
-            .jsonObject["items"]
-            ?.jsonArray
+            val body = resp.body?.string() ?: return@use null
+            val channelResponse = json.parseToJsonElement(body)
+            val items = channelResponse
+                .jsonObject["items"]
+                ?.jsonArray
 
-        if (items.isNullOrEmpty()) return null
+            if (items.isNullOrEmpty()) return@use null
 
-        return items[0]
-            .jsonObject["contentDetails"]
-            ?.jsonObject["relatedPlaylists"]
-            ?.jsonObject["uploads"]
-            ?.jsonPrimitive
-            ?.content
+            items[0]
+                .jsonObject["contentDetails"]
+                ?.jsonObject["relatedPlaylists"]
+                ?.jsonObject["uploads"]
+                ?.jsonPrimitive
+                ?.content
+        }
     }
 
     /**
@@ -90,11 +92,13 @@ class YouTubeApiClient(
         val request = Request.Builder().url(url).get().build()
         val response = client.newCall(request).execute()
 
-        if (!response.isSuccessful) return emptyList()
+        return response.use { resp ->
+            if (!resp.isSuccessful) return@use emptyList()
 
-        val body = response.body?.string() ?: return emptyList()
-        val playlistResponse = json.decodeFromString<PlaylistItemsResponse>(body)
-        return playlistResponse.items
+            val body = resp.body?.string() ?: return@use emptyList()
+            val playlistResponse = json.decodeFromString<PlaylistItemsResponse>(body)
+            playlistResponse.items
+        }
     }
 
     /**
@@ -122,10 +126,12 @@ class YouTubeApiClient(
         val request = Request.Builder().url(url).get().build()
         val response = client.newCall(request).execute()
 
-        if (!response.isSuccessful) return emptyList()
+        return response.use { resp ->
+            if (!resp.isSuccessful) return@use emptyList()
 
-        val body = response.body?.string() ?: return emptyList()
-        val videosResponse = json.decodeFromString<VideosResponse>(body)
-        return videosResponse.items
+            val body = resp.body?.string() ?: return@use emptyList()
+            val videosResponse = json.decodeFromString<VideosResponse>(body)
+            videosResponse.items
+        }
     }
 }

@@ -69,7 +69,7 @@ fun LecturesScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Video list placeholder — will be populated with YouTube data
+        // Video list — lectures available via individual sheikh profiles
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(16.dp),
@@ -89,7 +89,7 @@ fun LecturesScreen(
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
-                            text = "سيتم تحميل الدروس من يوتيوب",
+                            text = "يمكنك تصفح دروس العلماء من صفحة كلشيخ",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )

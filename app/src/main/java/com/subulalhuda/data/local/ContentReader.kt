@@ -32,7 +32,7 @@ object ContentReader {
      */
     fun readAsset(context: Context, fileName: String): String? {
         return try {
-            context.assets.open("content/$fileName").bufferedReader().use { it.readText() }
+            context.assets.open("content/$fileName").bufferedReader().use { it.readText().removePrefix("\uFEFF") }
         } catch (e: Exception) {
             null
         }
