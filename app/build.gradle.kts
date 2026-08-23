@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -9,7 +11,7 @@ android {
     compileSdk = 36
 
     // Read YouTube API key from local.properties (gitignored, never committed)
-    val localProps = java.util.Properties()
+    val localProps = Properties()
     val localPropsFile = rootProject.file("local.properties")
     if (localPropsFile.exists()) {
         localProps.load(localPropsFile.inputStream())
