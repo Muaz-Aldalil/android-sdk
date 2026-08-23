@@ -1,4 +1,5 @@
 import java.util.Properties
+import org.gradle.api.GradleException
 
 plugins {
     alias(libs.plugins.android.application)
@@ -6,16 +7,23 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+// --- Local configuration (gitignored, never committed) ---
+val localProps = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}
+
+// --- Release signing (all 4 values required, all must be non-blank) ---
+val releaseStoreFile = localProps.getProperty("RELEASE_STORE_FILE")?.takeIf { it.isNotBlank() }
+val releaseStorePassword = localProps.getProperty("RELEASE_STORE_PASSWORD")?.takeIf { it.isNotBlank() }
+val releaseKeyAlias = localProps.getProperty("RELEASE_KEY_ALIAS")?.takeIf { it.isNotBlank() }
+val releaseKeyPassword = localProps.getProperty("RELEASE_KEY_PASSWORD")?.takeIf { it.isNotBlank() }
+val hasReleaseSigning = releaseStoreFile != null && releaseStorePassword != null &&
+    releaseKeyAlias != null && releaseKeyPassword != null
+
 android {
     namespace = "com.subulalhuda"
     compileSdk = 36
-
-    // Read YouTube API key from local.properties (gitignored, never committed)
-    val localProps = Properties()
-    val localPropsFile = rootProject.file("local.properties")
-    if (localPropsFile.exists()) {
-        localProps.load(localPropsFile.inputStream())
-    }
 
     defaultConfig {
         applicationId = "com.subulalhuda"
@@ -24,7 +32,7 @@ android {
         versionCode = 1
         versionName = "1.0.0"
 
-        // YouTube API key — read from local.properties
+        // YouTube API key — read from local.properties (gitignored)
         // Must be a SEPARATE key from the website's VITE_YOUTUBE_API_KEY
         buildConfigField(
             "String",
@@ -35,6 +43,17 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("release") {
+                storeFile = rootProject.file(releaseStoreFile!!)
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -43,6 +62,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            if (hasReleaseSigning) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 
@@ -56,6 +78,24 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+    }
+}
+
+// Block assembleRelease before any task executes when signing is not configured.
+// This runs at task-graph resolution time — before compilation, packaging, or signing.
+gradle.taskGraph.whenReady { graph ->
+    if (!hasReleaseSigning && graph.allTasks.any { it.name == "assembleRelease" }) {
+        throw GradleException(
+            "Release signing not configured.\n\n" +
+                "Create local.properties in the project root with:\n" +
+                "  RELEASE_STORE_FILE=subul-alhuda-release.jks\n" +
+                "  RELEASE_STORE_PASSWORD=<keystore-password>\n" +
+                "  RELEASE_KEY_ALIAS=subul-alhuda\n" +
+                "  RELEASE_KEY_PASSWORD=<key-password>\n\n" +
+                "Generate the keystore:\n" +
+                "  keytool -genkeypair -v -keystore subul-alhuda-release.jks " +
+                "-keyalg RSA -keysize 2048 -validity 10000 -alias subul-alhuda"
+        )
     }
 }
 
