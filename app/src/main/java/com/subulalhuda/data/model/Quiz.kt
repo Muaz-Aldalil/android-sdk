@@ -1,7 +1,7 @@
 package com.subulalhuda.data.model
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonClassDiscriminator
+import kotlinx.serialization.SerialName
 
 /**
  * A quiz with questions. Can be multiple-choice or true-false.

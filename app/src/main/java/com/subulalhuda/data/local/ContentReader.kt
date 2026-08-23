@@ -1,6 +1,7 @@
 package com.subulalhuda.data.local
 
 import android.content.Context
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 
@@ -19,7 +20,7 @@ import kotlinx.serialization.json.JsonElement
  */
 object ContentReader {
 
-    private val json = Json {
+    @PublishedApi internal val json = Json {
         ignoreUnknownKeys = true
         isLenient = true
         coerceInputValues = true

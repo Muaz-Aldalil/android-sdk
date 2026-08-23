@@ -88,11 +88,7 @@ data class VideoContentDetails(
     val definition: String? = null,
     val caption: String? = null,
     val licensedContent: Boolean? = null,
-    @SerialName("contentRating") val contentRating: ContentRating? = null,
 )
-
-@Serializable
-data class ContentRating()
 
 /**
  * Live streaming details — only present when video is/was live.
