@@ -55,6 +55,15 @@ fun SubulNavGraph(
                     onLecturesClick = {
                         navController.navigate(Screen.Lectures.route)
                     },
+                    onInteractiveClick = {
+                        navController.navigate(Screen.Interactive.route)
+                    },
+                    onContactClick = {
+                        navController.navigate(Screen.Contact.route)
+                    },
+                    onSheikhsClick = {
+                        navController.navigate(Screen.Sheikhs.route)
+                    },
                 )
             }
 

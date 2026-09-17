@@ -20,10 +20,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.subulalhuda.data.local.ContentRepository
 import com.subulalhuda.data.repository.YouTubeRepository
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.Locale
+import com.subulalhuda.util.formatArabicDate
 
 /**
  * Lectures screen — live feed of recent uploads with category keyword filtering.
@@ -265,7 +262,7 @@ private fun SkeletonRow() {
 
 // --- Helpers ---
 
-private data class LectureItem(
+internal data class LectureItem(
     val videoId: String,
     val title: String,
     val publishedAt: String,
@@ -288,16 +285,4 @@ private fun matchesCategory(category: String, title: String): Boolean = when (ca
     "fatawa" -> title.contains("فتوى")
     "clips" -> title.contains("مقتطفات")
     else -> false
-}
-
-private val arabicDateFormatter: DateTimeFormatter =
-    DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("ar"))
-
-private fun formatArabicDate(isoDate: String): String = try {
-    Instant.parse(isoDate)
-        .atZone(ZoneId.systemDefault())
-        .toLocalDate()
-        .format(arabicDateFormatter)
-} catch (_: Exception) {
-    isoDate.take(10) // fallback: raw "2024-01-15"
 }
