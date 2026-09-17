@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
             val youtubeRepository = remember {
                 val apiKey = BuildConfig.YOUTUBE_API_KEY
                 if (apiKey.isNotBlank()) {
-                    YouTubeRepository(appContext, apiKey, "UCoj4ymRxoI4hVJPXdhOlgkw")
+                    YouTubeRepository(apiKey, "UCoj4ymRxoI4hVJPXdhOlgkw")
                 } else {
                     null
                 }

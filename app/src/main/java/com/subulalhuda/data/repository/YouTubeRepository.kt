@@ -1,13 +1,11 @@
 package com.subulalhuda.data.repository
 
-import android.content.Context
-import android.content.SharedPreferences
 import com.subulalhuda.data.remote.YouTubeApiClient
 import com.subulalhuda.data.remote.PlaylistItem
 import com.subulalhuda.data.remote.VideoItem
-import com.subulalhuda.util.CacheManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
 
 /**
  * Repository for YouTube Data API v3 calls.
@@ -30,16 +28,14 @@ import kotlinx.coroutines.withContext
  * The quota numbers documented here are based on historical YouTube API documentation
  * and may not reflect 2026 quota system changes.
  *
- * @param context Application context
  * @param apiKey Separate YouTube API key (NOT the website's key)
  * @param channelId YouTube channel ID
  */
 class YouTubeRepository(
-    private val context: Context,
     private val apiKey: String,
     private val channelId: String,
 ) {
-    private val client = CacheManager.createCachedClient(context)
+    private val client = OkHttpClient()
     private val apiClient = YouTubeApiClient(apiKey, channelId, client)
 
     // In-memory memo for the uploads playlist ID — no TTL, no disk cache.
