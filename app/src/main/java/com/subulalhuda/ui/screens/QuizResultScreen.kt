@@ -13,7 +13,10 @@ import androidx.compose.ui.unit.dp
 import com.subulalhuda.data.local.ContentRepository
 
 /**
- * Quiz result screen — shows score and encouragement.
+ * Quiz result screen — score, percentage, correct/wrong counts, and replay.
+ *
+ * "إعادة الاختبار" restarts with the same difficulty/count (reshuffled);
+ * "اختبار جديد" returns to the setup stage.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -21,11 +24,16 @@ fun QuizResultScreen(
     quizId: String,
     score: Int,
     total: Int,
+    difficulty: String?,
+    count: Int,
     contentRepository: ContentRepository,
+    onRetry: () -> Unit,
+    onNewQuiz: () -> Unit,
     onBack: () -> Unit,
 ) {
     val quiz = contentRepository.getQuizById(quizId)
     val percentage = if (total > 0) (score * 100 / total) else 0
+    val wrong = total - score
 
     val message = when {
         percentage >= 80 -> "ممتاز! أداء رائع"
@@ -72,6 +80,63 @@ fun QuizResultScreen(
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.secondary,
             )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Correct / wrong counts
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Card(
+                    modifier = Modifier.weight(1f),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f),
+                    ),
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(
+                            text = "$score",
+                            style = MaterialTheme.typography.headlineMedium,
+                            color = MaterialTheme.colorScheme.tertiary,
+                        )
+                        Text(
+                            text = "صحيحة",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+                Card(
+                    modifier = Modifier.weight(1f),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.15f),
+                    ),
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(
+                            text = "$wrong",
+                            style = MaterialTheme.typography.headlineMedium,
+                            color = MaterialTheme.colorScheme.error,
+                        )
+                        Text(
+                            text = "خاطئة",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            }
+
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
@@ -83,9 +148,22 @@ fun QuizResultScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                onClick = onBack,
+                onClick = onRetry,
                 modifier = Modifier.fillMaxWidth(),
             ) {
+                Text("إعادة الاختبار")
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedButton(
+                onClick = onNewQuiz,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text("اختبار جديد")
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+
+            TextButton(onClick = onBack) {
                 Text("العودة للاختبارات")
             }
         }

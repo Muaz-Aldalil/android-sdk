@@ -43,13 +43,32 @@ sealed class Screen(val route: String) {
         fun createRoute(sheikhId: String) = "sheikh/$sheikhId/videos"
     }
 
-    data object Quiz : Screen("quiz/{quizId}") {
-        fun createRoute(quizId: String) = "quiz/$quizId"
+    data object Quiz : Screen("quiz/{quizId}?difficulty={difficulty}&count={count}") {
+        fun createRoute(quizId: String, difficulty: String? = null, count: Int? = null): String {
+            val base = "quiz/$quizId"
+            val params = mutableListOf<String>()
+            difficulty?.let { params += "difficulty=$it" }
+            count?.let { params += "count=$it" }
+            return if (params.isEmpty()) base else "$base?${params.joinToString("&")}"
+        }
     }
 
-    data object QuizResult : Screen("quiz/{quizId}/result?score={score}&total={total}") {
-        fun createRoute(quizId: String, score: Int, total: Int) =
-            "quiz/$quizId/result?score=$score&total=$total"
+    data object QuizResult : Screen(
+        "quiz/{quizId}/result?score={score}&total={total}&difficulty={difficulty}&count={count}",
+    ) {
+        fun createRoute(
+            quizId: String,
+            score: Int,
+            total: Int,
+            difficulty: String? = null,
+            count: Int? = null,
+        ): String {
+            val base = "quiz/$quizId/result?score=$score&total=$total"
+            val params = mutableListOf<String>()
+            difficulty?.let { params += "difficulty=$it" }
+            count?.let { params += "count=$it" }
+            return if (params.isEmpty()) base else "$base&${params.joinToString("&")}"
+        }
     }
 
     data object KidsGame : Screen("game/{gameId}") {

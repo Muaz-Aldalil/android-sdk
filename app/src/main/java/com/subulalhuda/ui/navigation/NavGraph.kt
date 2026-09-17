@@ -120,14 +120,30 @@ fun SubulNavGraph(
 
             composable(
                 route = Screen.Quiz.route,
-                arguments = listOf(navArgument("quizId") { type = NavType.StringType }),
+                arguments = listOf(
+                    navArgument("quizId") { type = NavType.StringType },
+                    navArgument("difficulty") {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    },
+                    navArgument("count") {
+                        type = NavType.IntType
+                        defaultValue = 0
+                    },
+                ),
             ) { backStackEntry ->
                 val quizId = backStackEntry.arguments?.getString("quizId") ?: return@composable
+                val difficulty = backStackEntry.arguments?.getString("difficulty")
+                val count = backStackEntry.arguments?.getInt("count") ?: 0
                 QuizScreen(
                     quizId = quizId,
                     contentRepository = contentRepository,
-                    onQuizComplete = { score, total ->
-                        navController.navigate(Screen.QuizResult.createRoute(quizId, score, total)) {
+                    initialDifficulty = difficulty,
+                    initialCount = count,
+                    onQuizComplete = { score, total, diff, cnt ->
+                        navController.navigate(
+                            Screen.QuizResult.createRoute(quizId, score, total, diff, cnt),
+                        ) {
                             popUpTo(Screen.Quiz.createRoute(quizId)) { inclusive = true }
                         }
                     },
@@ -141,16 +157,40 @@ fun SubulNavGraph(
                     navArgument("quizId") { type = NavType.StringType },
                     navArgument("score") { type = NavType.IntType },
                     navArgument("total") { type = NavType.IntType },
+                    navArgument("difficulty") {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    },
+                    navArgument("count") {
+                        type = NavType.IntType
+                        defaultValue = 0
+                    },
                 ),
             ) { backStackEntry ->
                 val quizId = backStackEntry.arguments?.getString("quizId") ?: return@composable
                 val score = backStackEntry.arguments?.getInt("score") ?: 0
                 val total = backStackEntry.arguments?.getInt("total") ?: 0
+                val difficulty = backStackEntry.arguments?.getString("difficulty")
+                val count = backStackEntry.arguments?.getInt("count") ?: 0
                 QuizResultScreen(
                     quizId = quizId,
                     score = score,
                     total = total,
+                    difficulty = difficulty,
+                    count = count,
                     contentRepository = contentRepository,
+                    onRetry = {
+                        navController.navigate(
+                            Screen.Quiz.createRoute(quizId, difficulty, count),
+                        ) {
+                            popUpTo(Screen.QuizResult.route) { inclusive = true }
+                        }
+                    },
+                    onNewQuiz = {
+                        navController.navigate(Screen.Quiz.createRoute(quizId)) {
+                            popUpTo(Screen.QuizResult.route) { inclusive = true }
+                        }
+                    },
                     onBack = { navController.popBackStack() },
                 )
             }
