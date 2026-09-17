@@ -115,6 +115,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // Test
+    testImplementation(libs.junit)
     testImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.androidx.ui.test.junit4)
 }
