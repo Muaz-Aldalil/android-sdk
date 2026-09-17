@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Dark-mode cold start. Without this variant the launcher uses the light
+  theme first and flashes a light backdrop before Compose takes over
+  (SubulTheme sets the real colors at runtime).
+-->
+<resources>
+    <style name="Theme.SubulAlhuda" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowBackground">#0A0A0A</item>
+    </style>
+</resources>

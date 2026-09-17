@@ -5,11 +5,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import com.subulalhuda.data.local.ContentRepository
 import com.subulalhuda.data.repository.YouTubeRepository
 import com.subulalhuda.ui.navigation.SubulNavGraph
@@ -47,16 +50,20 @@ class MainActivity : ComponentActivity() {
                 mutableStateOf(prefs.getBoolean("dark_theme", systemDark))
             }
 
-            SubulTheme(darkTheme = isDark) {
-                SubulNavGraph(
-                    contentRepository = contentRepository,
-                    youtubeRepository = youtubeRepository,
-                    isDark = isDark,
-                    onThemeChanged = { dark ->
-                        isDark = dark
-                        prefs.edit().putBoolean("dark_theme", dark).apply()
-                    },
-                )
+            // Content is Arabic-only: force RTL regardless of device locale,
+            // so English-locale phones don't render mirrored LTR layouts.
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                SubulTheme(darkTheme = isDark) {
+                    SubulNavGraph(
+                        contentRepository = contentRepository,
+                        youtubeRepository = youtubeRepository,
+                        isDark = isDark,
+                        onThemeChanged = { dark ->
+                            isDark = dark
+                            prefs.edit().putBoolean("dark_theme", dark).apply()
+                        },
+                    )
+                }
             }
         }
     }

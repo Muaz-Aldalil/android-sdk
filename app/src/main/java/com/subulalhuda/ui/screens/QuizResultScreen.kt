@@ -88,6 +88,7 @@ fun QuizResultScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 Card(
+                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     modifier = Modifier.weight(1f),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f),
@@ -112,6 +113,7 @@ fun QuizResultScreen(
                     }
                 }
                 Card(
+                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     modifier = Modifier.weight(1f),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.15f),

@@ -181,6 +181,7 @@ fun LecturesScreen(
 @Composable
 private fun LectureRow(lecture: LectureItem, onClick: () -> Unit) {
     Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
@@ -221,6 +222,7 @@ private fun LectureRow(lecture: LectureItem, onClick: () -> Unit) {
 @Composable
 private fun SkeletonRow() {
     Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
             .fillMaxWidth()
             .height(84.dp),

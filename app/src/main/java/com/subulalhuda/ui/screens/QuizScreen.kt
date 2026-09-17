@@ -204,6 +204,7 @@ fun QuizScreen(
                     if (answered) {
                         Spacer(modifier = Modifier.height(16.dp))
                         Card(
+                            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                             modifier = Modifier.fillMaxWidth(),
                             colors = CardDefaults.cardColors(
                                 containerColor = MaterialTheme.colorScheme.surfaceVariant

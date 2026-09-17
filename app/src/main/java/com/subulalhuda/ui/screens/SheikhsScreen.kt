@@ -59,6 +59,7 @@ fun SheikhListItem(
     onClick: () -> Unit,
 ) {
     Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),

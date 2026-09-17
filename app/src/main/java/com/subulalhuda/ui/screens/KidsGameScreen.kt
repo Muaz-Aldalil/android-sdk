@@ -172,6 +172,7 @@ private fun TfGame(game: KidGame, modifier: Modifier = Modifier) {
         if (answered) {
             Spacer(modifier = Modifier.height(16.dp))
             Card(
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
             ) {
@@ -226,6 +227,7 @@ private fun MatchingGame(game: KidGame, modifier: Modifier = Modifier) {
             pairs.forEachIndexed { i, pair ->
                 val isCorrect = matchValues[i] == pair.right
                 Card(
+                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = if (isCorrect) {
@@ -305,6 +307,7 @@ private fun MatchingGame(game: KidGame, modifier: Modifier = Modifier) {
         pairs.forEachIndexed { i, pair ->
             val matchedValue = matchValues[i]
             Card(
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
@@ -340,6 +343,7 @@ private fun MatchingGame(game: KidGame, modifier: Modifier = Modifier) {
         shuffledRight.forEach { pair ->
             val used = matchValues.contains(pair.right)
             Card(
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)

@@ -273,6 +273,7 @@ fun LiveBanner(title: String, onClick: () -> Unit) {
     )
 
     Card(
+        elevation = CardDefaultselevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -317,10 +318,11 @@ fun HeroSection(
     onVerseClick: () -> Unit,
 ) {
     Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
         ),
@@ -389,6 +391,7 @@ fun AnnouncementCard(
     onClick: () -> Unit,
 ) {
     Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp)
@@ -477,6 +480,7 @@ fun SheikhCard(
     onClick: () -> Unit,
 ) {
     Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
             .width(140.dp)
             .clickable(onClick = onClick),
@@ -508,6 +512,7 @@ fun SheikhCard(
 @Composable
 fun VideoRow(video: LectureItem, onClick: () -> Unit) {
     Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp)
@@ -549,6 +554,7 @@ fun VideoRow(video: LectureItem, onClick: () -> Unit) {
 @Composable
 fun VideoSkeletonRow() {
     Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp),
@@ -622,6 +628,7 @@ private fun QuickLinkTile(
     modifier: Modifier = Modifier,
 ) {
     Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = modifier.clickable(onClick = onClick),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

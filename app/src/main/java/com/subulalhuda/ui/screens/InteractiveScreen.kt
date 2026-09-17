@@ -71,6 +71,7 @@ fun InteractiveScreen(
 @Composable
 fun QuizCard(quiz: Quiz, onClick: () -> Unit) {
     Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
@@ -107,6 +108,7 @@ fun QuizCard(quiz: Quiz, onClick: () -> Unit) {
 @Composable
 fun GameCard(game: KidGame, onClick: () -> Unit) {
     Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
