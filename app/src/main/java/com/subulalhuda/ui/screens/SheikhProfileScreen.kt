@@ -149,7 +149,7 @@ fun VideoListItem(videoId: String, title: String?, onClick: () -> Unit) {
     val thumbnailUrl = "https://img.youtube.com/vi/$videoId/mqdefault.jpg"
 
     Card(
-        elevation = CardDefaultselevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),

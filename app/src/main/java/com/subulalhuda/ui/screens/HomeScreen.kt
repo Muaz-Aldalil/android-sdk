@@ -273,7 +273,7 @@ fun LiveBanner(title: String, onClick: () -> Unit) {
     )
 
     Card(
-        elevation = CardDefaultselevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -510,7 +510,7 @@ fun SheikhCard(
 }
 
 @Composable
-fun VideoRow(video: LectureItem, onClick: () -> Unit) {
+internal fun VideoRow(video: LectureItem, onClick: () -> Unit) {
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
