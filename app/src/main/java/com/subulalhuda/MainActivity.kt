@@ -41,8 +41,10 @@ class MainActivity : ComponentActivity() {
 
             // Dark mode preference — single source of truth
             val prefs = remember { getSharedPreferences("subul_prefs", MODE_PRIVATE) }
+            // isSystemInDarkTheme is @Composable — must be read outside remember {}
+            val systemDark = isSystemInDarkTheme()
             var isDark by remember {
-                mutableStateOf(prefs.getBoolean("dark_theme", isSystemInDarkTheme()))
+                mutableStateOf(prefs.getBoolean("dark_theme", systemDark))
             }
 
             SubulTheme(darkTheme = isDark) {

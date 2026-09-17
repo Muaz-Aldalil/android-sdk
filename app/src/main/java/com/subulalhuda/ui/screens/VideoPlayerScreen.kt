@@ -96,6 +96,23 @@ fun VideoPlayerScreen(
                                 settings.domStorageEnabled = true
                                 settings.mediaPlaybackRequiresUserGesture = false
                                 webViewClient = object : WebViewClient() {
+                                    override fun shouldOverrideUrlLoading(
+                                        view: WebView,
+                                        request: WebResourceRequest,
+                                    ): Boolean {
+                                        // Keep in-app navigation inside the embed; hand
+                                        // anything else (e.g. "watch on YouTube") to the OS.
+                                        if (request.url.host?.contains("youtube.com") == true) {
+                                            try {
+                                                view.context.startActivity(
+                                                    Intent(Intent.ACTION_VIEW, request.url),
+                                                )
+                                            } catch (_: android.content.ActivityNotFoundException) { }
+                                            return true
+                                        }
+                                        return false
+                                    }
+
                                     override fun onPageFinished(view: WebView, url: String?) {
                                         pageLoaded = true
                                     }
@@ -107,8 +124,21 @@ fun VideoPlayerScreen(
                                     ) {
                                         if (request.isForMainFrame) playerError = true
                                     }
+
+                                    override fun onReceivedHttpError(
+                                        view: WebView,
+                                        request: WebResourceRequest,
+                                        errorResponse: android.webkit.WebResourceResponse,
+                                    ) {
+                                        // 404 (bad video ID) / 403 (embedding disabled)
+                                        if (request.isForMainFrame) playerError = true
+                                    }
                                 }
-                                loadUrl("https://www.youtube.com/embed/$videoId?autoplay=1")
+                                // Enables the player's fullscreen button
+                                webChromeClient = android.webkit.WebChromeClient()
+                                loadUrl(
+                                    "https://www.youtube.com/embed/${Uri.encode(videoId)}?autoplay=1",
+                                )
                             }
                         },
                         onRelease = { view -> view.destroy() },
