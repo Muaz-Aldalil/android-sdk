@@ -1,7 +1,12 @@
 package com.subulalhuda.ui.screens
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -13,28 +18,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 /**
- * Video player screen — plays a YouTube video using android-youtube-player.
- * Falls back to external YouTube app on error.
+ * Video player screen — plays a YouTube video via the embed iframe in a WebView.
+ * Falls back to the external YouTube app on load failure.
+ *
+ * The previous implementation used android-youtube-player, whose underlying
+ * YouTube Android Player API was shut down by Google. A WebView iframe embed
+ * needs no extra dependencies and keeps the external-app fallback.
+ *
+ * @param videoId YouTube video ID
+ * @param title Optional lecture title (wired by the data layer; falls back to a generic label)
+ * @param onBack Navigation callback
  */
+@SuppressLint("SetJavaScriptEnabled")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoPlayerScreen(
     videoId: String,
     onBack: () -> Unit,
+    title: String? = null,
 ) {
     val context = LocalContext.current
-    var playerError by remember { mutableStateOf<String?>(null) }
+    var playerError by remember { mutableStateOf(false) }
+    var pageLoaded by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(videoId) },
+                title = { Text(title ?: "الدرس") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "رجوع")
@@ -48,7 +60,8 @@ fun VideoPlayerScreen(
                 .fillMaxSize()
                 .padding(padding),
         ) {
-            if (playerError != null) {
+            if (playerError) {
+                // Fallback: open in the external YouTube app
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -71,29 +84,59 @@ fun VideoPlayerScreen(
                     )
                 }
             } else {
-                AndroidView(
-                    factory = { ctx ->
-                        YouTubePlayerView(ctx).apply {
-                            enableAutomaticInitialization = false
-                            initialize(object : AbstractYouTubePlayerListener() {
-                                override fun onReady(youTubePlayer: YouTubePlayer) {
-                                    youTubePlayer.loadVideo(videoId, 0f)
-                                }
-
-                                override fun onError(
-                                    youTubePlayer: YouTubePlayer,
-                                    error: PlayerConstants.PlayerError,
-                                ) {
-                                    playerError = error.name
-                                }
-                            })
-                        }
-                    },
-                    onRelease = { view -> view.release() },
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(16f / 9f),
-                )
+                ) {
+                    AndroidView(
+                        factory = { ctx ->
+                            WebView(ctx).apply {
+                                settings.javaScriptEnabled = true
+                                settings.domStorageEnabled = true
+                                settings.mediaPlaybackRequiresUserGesture = false
+                                webViewClient = object : WebViewClient() {
+                                    override fun onPageFinished(view: WebView, url: String?) {
+                                        pageLoaded = true
+                                    }
+
+                                    override fun onReceivedError(
+                                        view: WebView,
+                                        request: WebResourceRequest,
+                                        error: WebResourceError,
+                                    ) {
+                                        if (request.isForMainFrame) playerError = true
+                                    }
+                                }
+                                loadUrl("https://www.youtube.com/embed/$videoId?autoplay=1")
+                            }
+                        },
+                        onRelease = { view -> view.destroy() },
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                    if (!pageLoaded) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center),
+                        )
+                    }
+                }
+            }
+
+            // Secondary affordance — embeds can fail silently (age-restricted, region-locked)
+            TextButton(
+                onClick = {
+                    try {
+                        context.startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://www.youtube.com/watch?v=$videoId"),
+                            ),
+                        )
+                    } catch (_: android.content.ActivityNotFoundException) { }
+                },
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            ) {
+                Text("افتح في تطبيق يوتيوب")
             }
         }
     }

@@ -27,6 +27,3 @@
 # Coil
 -keep class coil3.** { *; }
 -dontwarn coil3.**
-
-# YouTube Player
--keep class com.pierfrancescosoffritti.androidyoutubeplayer.** { *; }
