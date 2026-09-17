@@ -59,10 +59,59 @@ fun KidsGameScreen(
 
 @Composable
 private fun TfGame(game: KidGame, modifier: Modifier = Modifier) {
-    val questions = game.questions ?: return
-    var currentIndex by remember { mutableIntStateOf(0) }
-    var score by remember { mutableIntStateOf(0) }
-    var answered by remember { mutableStateOf(false) }
+    val allQuestions = game.questions ?: return
+
+    // Shuffled question order — reshuffled on replay; survives process death
+    var questionIds by rememberSaveable {
+        mutableStateOf(allQuestions.shuffled().map { it.id })
+    }
+    var currentIndex by rememberSaveable { mutableIntStateOf(0) }
+    var score by rememberSaveable { mutableIntStateOf(0) }
+    var answered by rememberSaveable { mutableStateOf(false) }
+    var selected by rememberSaveable { mutableStateOf<Boolean?>(null) }
+
+    val questions = questionIds.mapNotNull { id -> allQuestions.find { it.id == id } }
+    val finished = questionIds.isNotEmpty() && currentIndex >= questions.size
+
+    if (finished) {
+        val message = when {
+            score == questions.size -> "نتيجة مئوية! أنت بطل!"
+            score >= questions.size / 2 -> "عمل ممتاز! واصل التعلم"
+            else -> "حاول مرة أخرى — ستتحسن!"
+        }
+        Column(
+            modifier = modifier.fillMaxSize().padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Text("النتيجة", style = MaterialTheme.typography.headlineSmall)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "$score / ${questions.size}",
+                style = MaterialTheme.typography.displaySmall,
+                color = MaterialTheme.colorScheme.tertiary,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = message,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            Button(
+                onClick = {
+                    questionIds = allQuestions.shuffled().map { it.id }
+                    currentIndex = 0
+                    score = 0
+                    answered = false
+                    selected = null
+                },
+            ) {
+                Text("العب مرة أخرى")
+            }
+        }
+        return
+    }
 
     val question = questions.getOrNull(currentIndex) ?: return
 
@@ -94,15 +143,20 @@ private fun TfGame(game: KidGame, modifier: Modifier = Modifier) {
         ) {
             listOf(true to "صواب", false to "خطأ").forEach { (value, label) ->
                 val isCorrect = value == question.answer
+                val isSelected = selected == value
+                // Web parity: correct option always green after answering;
+                // only the selected-wrong option turns red; others stay neutral.
                 val containerColor = when {
                     answered && isCorrect -> MaterialTheme.colorScheme.tertiary.copy(alpha = 0.2f)
-                    answered && !isCorrect -> MaterialTheme.colorScheme.error.copy(alpha = 0.2f)
+                    answered && isSelected && !isCorrect -> MaterialTheme.colorScheme.error.copy(alpha = 0.2f)
+                    isSelected -> MaterialTheme.colorScheme.primaryContainer
                     else -> MaterialTheme.colorScheme.surfaceVariant
                 }
 
                 OutlinedButton(
                     onClick = {
                         if (!answered) {
+                            selected = value
                             answered = true
                             if (isCorrect) score++
                         }
@@ -130,14 +184,13 @@ private fun TfGame(game: KidGame, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
-                    if (currentIndex < questions.size - 1) {
-                        currentIndex++
-                        answered = false
-                    }
+                    currentIndex++
+                    answered = false
+                    selected = null
                 },
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(if (currentIndex < questions.size - 1) "التالي" else "انتهت اللعبة — النتيجة: $score / ${questions.size}")
+                Text(if (currentIndex < questions.size - 1) "التالي" else "النتيجة")
             }
         }
     }

@@ -14,14 +14,15 @@ import androidx.compose.ui.unit.dp
 import com.subulalhuda.data.local.ContentRepository
 
 /**
- * Search screen — search across sheikhs and quizzes.
+ * Search screen — search across sheikhs, quizzes, and games.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     contentRepository: ContentRepository,
-    onVideoClick: (String) -> Unit,
     onSheikhClick: (String) -> Unit,
+    onQuizClick: (String) -> Unit,
+    onGameClick: (String) -> Unit,
     onBack: () -> Unit,
 ) {
     var query by remember { mutableStateOf("") }
@@ -101,6 +102,7 @@ fun SearchScreen(
                         ListItem(
                             headlineContent = { Text(quiz.title) },
                             supportingContent = { Text(quiz.description) },
+                            modifier = Modifier.clickable { onQuizClick(quiz.id) },
                         )
                     }
                 }
@@ -111,6 +113,7 @@ fun SearchScreen(
                         ListItem(
                             headlineContent = { Text(game.title) },
                             supportingContent = { Text(game.description) },
+                            modifier = Modifier.clickable { onGameClick(game.id) },
                         )
                     }
                 }

@@ -238,11 +238,14 @@ fun SubulNavGraph(
             composable(Screen.Search.route) {
                 SearchScreen(
                     contentRepository = contentRepository,
-                    onVideoClick = { videoId ->
-                        navController.navigate(Screen.YouTubePlayer.createRoute(videoId))
-                    },
                     onSheikhClick = { sheikhId ->
                         navController.navigate(Screen.SheikhProfile.createRoute(sheikhId))
+                    },
+                    onQuizClick = { quizId ->
+                        navController.navigate(Screen.Quiz.createRoute(quizId))
+                    },
+                    onGameClick = { gameId ->
+                        navController.navigate(Screen.KidsGame.createRoute(gameId))
                     },
                     onBack = { navController.popBackStack() },
                 )
