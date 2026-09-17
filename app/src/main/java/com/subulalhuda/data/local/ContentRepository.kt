@@ -3,7 +3,6 @@ package com.subulalhuda.data.local
 import android.content.Context
 import com.subulalhuda.data.model.*
 import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 
 /**
  * Provides access to all static content bundled in assets/content/.
@@ -12,14 +11,10 @@ import kotlinx.serialization.json.Json
  * as-is into the Android project. This class is the single point of access.
  *
  * Data is loaded lazily and cached in memory after first access.
+ * JSON parsing reuses [ContentReader.json] so the serialization config
+ * lives in exactly one place.
  */
 class ContentRepository(private val context: Context) {
-
-    private val json = Json {
-        ignoreUnknownKeys = true
-        isLenient = true
-        coerceInputValues = true
-    }
 
     // region Lazy-loaded content
 
@@ -63,7 +58,7 @@ class ContentRepository(private val context: Context) {
     private inline fun <reified T> loadJson(fileName: String, fallback: T): T {
         val rawJson = ContentReader.readAsset(context, fileName) ?: return fallback
         return try {
-            json.decodeFromString<T>(rawJson)
+            ContentReader.json.decodeFromString<T>(rawJson)
         } catch (e: Exception) {
             fallback
         }
@@ -72,7 +67,7 @@ class ContentRepository(private val context: Context) {
     private fun loadSocialLinks(): SocialLinks? {
         val rawJson = ContentReader.readAsset(context, ContentReader.Files.SOCIAL_LINKS) ?: return null
         return try {
-            json.decodeFromString<SocialLinks>(rawJson)
+            ContentReader.json.decodeFromString<SocialLinks>(rawJson)
         } catch (e: Exception) {
             null
         }

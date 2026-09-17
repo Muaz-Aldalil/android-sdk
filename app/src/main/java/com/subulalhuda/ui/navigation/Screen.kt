@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
  * 5. المزيد (More)
  *
  * Nested screens (accessed from primary screens):
- * - SheikhProfile, SheikhVideos
+ * - SheikhProfile
  * - Quiz, QuizResult, KidsGame
  * - YouTubePlayer
  * - Search
@@ -37,10 +37,6 @@ sealed class Screen(val route: String) {
     // Nested screens
     data object SheikhProfile : Screen("sheikh/{sheikhId}") {
         fun createRoute(sheikhId: String) = "sheikh/$sheikhId"
-    }
-
-    data object SheikhVideos : Screen("sheikh/{sheikhId}/videos") {
-        fun createRoute(sheikhId: String) = "sheikh/$sheikhId/videos"
     }
 
     data object Quiz : Screen("quiz/{quizId}?difficulty={difficulty}&count={count}") {
