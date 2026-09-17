@@ -110,8 +110,9 @@ fun SubulNavGraph(
                 SheikhProfileScreen(
                     sheikhId = sheikhId,
                     contentRepository = contentRepository,
-                    onVideoClick = { videoId ->
-                        navController.navigate(Screen.YouTubePlayer.createRoute(videoId))
+                    youtubeRepository = youtubeRepository,
+                    onVideoClick = { videoId, title ->
+                        navController.navigate(Screen.YouTubePlayer.createRoute(videoId, title))
                     },
                     onBack = { navController.popBackStack() },
                 )
@@ -168,11 +169,19 @@ fun SubulNavGraph(
 
             composable(
                 route = Screen.YouTubePlayer.route,
-                arguments = listOf(navArgument("videoId") { type = NavType.StringType }),
+                arguments = listOf(
+                    navArgument("videoId") { type = NavType.StringType },
+                    navArgument("title") {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    },
+                ),
             ) { backStackEntry ->
                 val videoId = backStackEntry.arguments?.getString("videoId") ?: return@composable
+                val title = backStackEntry.arguments?.getString("title")
                 VideoPlayerScreen(
                     videoId = videoId,
+                    title = title,
                     onBack = { navController.popBackStack() },
                 )
             }

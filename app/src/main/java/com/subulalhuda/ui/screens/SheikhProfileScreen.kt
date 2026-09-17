@@ -10,6 +10,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,16 +22,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.subulalhuda.data.local.ContentRepository
+import com.subulalhuda.data.repository.YouTubeRepository
+import com.subulalhuda.util.videoCountLabel
 
 /**
  * Sheikh profile — avatar, name, bio, and their videos.
+ *
+ * Video titles are fetched from the YouTube Data API when a key is configured.
+ * Without a key (or on network failure) the list degrades to raw video IDs.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SheikhProfileScreen(
     sheikhId: String,
     contentRepository: ContentRepository,
-    onVideoClick: (String) -> Unit,
+    youtubeRepository: YouTubeRepository?,
+    onVideoClick: (String, String) -> Unit,
     onBack: () -> Unit,
 ) {
     val sheikh = contentRepository.getSheikhById(sheikhId)
@@ -40,6 +51,21 @@ fun SheikhProfileScreen(
             }
         }
         return
+    }
+
+    // videoId → title, populated from the API when available
+    var videoTitles by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
+
+    LaunchedEffect(sheikhId) {
+        val repo = youtubeRepository ?: return@LaunchedEffect
+        videoTitles = try {
+            repo.getVideoDetails(sheikh.videoIds)
+                .mapNotNull { item -> item.id?.let { it to (item.snippet?.title ?: "") } }
+                .toMap()
+                .filterValues { it.isNotBlank() }
+        } catch (_: Exception) {
+            emptyMap()
+        }
     }
 
     Scaffold(
@@ -89,7 +115,7 @@ fun SheikhProfileScreen(
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "${sheikh.videoIds.size} فيديو",
+                        text = videoCountLabel(sheikh.videoIds.size),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -108,14 +134,18 @@ fun SheikhProfileScreen(
             }
 
             items(sheikh.videoIds) { videoId ->
-                VideoListItem(videoId = videoId, onClick = { onVideoClick(videoId) })
+                VideoListItem(
+                    videoId = videoId,
+                    title = videoTitles[videoId],
+                    onClick = { onVideoClick(videoId, videoTitles[videoId] ?: "") },
+                )
             }
         }
     }
 }
 
 @Composable
-fun VideoListItem(videoId: String, onClick: () -> Unit) {
+fun VideoListItem(videoId: String, title: String?, onClick: () -> Unit) {
     val thumbnailUrl = "https://img.youtube.com/vi/$videoId/mqdefault.jpg"
 
     Card(
@@ -129,7 +159,7 @@ fun VideoListItem(videoId: String, onClick: () -> Unit) {
         ) {
             AsyncImage(
                 model = thumbnailUrl,
-                contentDescription = videoId,
+                contentDescription = title ?: videoId,
                 modifier = Modifier
                     .size(120.dp, 68.dp)
                     .clip(MaterialTheme.shapes.small)
@@ -137,7 +167,7 @@ fun VideoListItem(videoId: String, onClick: () -> Unit) {
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
-                text = videoId,
+                text = title ?: videoId,
                 style = MaterialTheme.typography.bodyMedium,
             )
         }

@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.subulalhuda.data.local.ContentRepository
 import com.subulalhuda.data.model.Sheikh
+import com.subulalhuda.util.videoCountLabel
 
 /**
  * Sheikhs grid — displays all 15 sheikh profiles.
@@ -94,7 +95,7 @@ fun SheikhListItem(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = "${sheikh.videoIds.size} فيديو",
+                    text = videoCountLabel(sheikh.videoIds.size),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

@@ -6,6 +6,8 @@ import com.subulalhuda.data.remote.YouTubeApiClient
 import com.subulalhuda.data.remote.PlaylistItem
 import com.subulalhuda.data.remote.VideoItem
 import com.subulalhuda.util.CacheManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Repository for YouTube Data API v3 calls.
@@ -40,7 +42,8 @@ class YouTubeRepository(
     private val client = CacheManager.createCachedClient(context)
     private val apiClient = YouTubeApiClient(apiKey, channelId, client)
 
-    // Cached uploads playlist ID (7-day TTL in HTTP cache)
+    // In-memory memo for the uploads playlist ID — no TTL, no disk cache.
+    // A fresh process re-fetches it once.
     @Volatile
     private var uploadsPlaylistId: String? = null
 
@@ -49,11 +52,11 @@ class YouTubeRepository(
      *
      * Quota cost: 1 unit (if cache miss)
      */
-    fun getUploadsPlaylistId(): String? {
-        uploadsPlaylistId?.let { return it }
+    suspend fun getUploadsPlaylistId(): String? = withContext(Dispatchers.IO) {
+        uploadsPlaylistId?.let { return@withContext it }
         val id = apiClient.getUploadsPlaylistId()
         uploadsPlaylistId = id
-        return id
+        id
     }
 
     /**
@@ -64,10 +67,11 @@ class YouTubeRepository(
      *
      * Quota cost: 1 unit (if cache miss)
      */
-    fun getRecentUploads(maxResults: Int = 5): List<PlaylistItem> {
-        val playlistId = getUploadsPlaylistId() ?: return emptyList()
-        return apiClient.getRecentUploads(playlistId, maxResults)
-    }
+    suspend fun getRecentUploads(maxResults: Int = 5): List<PlaylistItem> =
+        withContext(Dispatchers.IO) {
+            val playlistId = getUploadsPlaylistId() ?: return@withContext emptyList()
+            apiClient.getRecentUploads(playlistId, maxResults)
+        }
 
     /**
      * Get video details including live streaming status.
@@ -78,9 +82,10 @@ class YouTubeRepository(
      * IMPORTANT: Only videos in the recent uploads are checked.
      * A livestream that's no longer in the recent window won't be detected.
      */
-    fun getVideoDetails(videoIds: List<String>): List<VideoItem> {
-        return apiClient.getVideoDetails(videoIds)
-    }
+    suspend fun getVideoDetails(videoIds: List<String>): List<VideoItem> =
+        withContext(Dispatchers.IO) {
+            apiClient.getVideoDetails(videoIds)
+        }
 
     /**
      * Check if any of the recent uploads are currently live.
@@ -94,42 +99,43 @@ class YouTubeRepository(
      * No background polling. This method is called only when the user is actively
      * viewing the home screen or a relevant section.
      */
-    fun checkLiveStatus(maxVideosToCheck: Int = 5): LiveCheckResult {
-        return try {
-            val recentUploads = getRecentUploads(maxVideosToCheck)
-            if (recentUploads.isEmpty()) {
-                return LiveCheckResult.NoVideos
-            }
+    suspend fun checkLiveStatus(maxVideosToCheck: Int = 5): LiveCheckResult =
+        withContext(Dispatchers.IO) {
+            try {
+                val recentUploads = getRecentUploads(maxVideosToCheck)
+                if (recentUploads.isEmpty()) {
+                    return@withContext LiveCheckResult.NoVideos
+                }
 
-            val videoIds = recentUploads.mapNotNull { it.contentDetails?.videoId }
-            if (videoIds.isEmpty()) {
-                return LiveCheckResult.NoVideos
-            }
+                val videoIds = recentUploads.mapNotNull { it.contentDetails?.videoId }
+                if (videoIds.isEmpty()) {
+                    return@withContext LiveCheckResult.NoVideos
+                }
 
-            val videoDetails = getVideoDetails(videoIds)
+                val videoDetails = getVideoDetails(videoIds)
 
-            // Find any video that has live streaming details with an actual start time
-            // but no end time (meaning it's currently live)
-            val liveVideo = videoDetails.find { video ->
-                val liveDetails = video.liveStreamingDetails
-                liveDetails != null &&
-                    liveDetails.actualStartTime != null &&
-                    liveDetails.actualEndTime == null
-            }
+                // Find any video that has live streaming details with an actual start time
+                // but no end time (meaning it's currently live)
+                val liveVideo = videoDetails.find { video ->
+                    val liveDetails = video.liveStreamingDetails
+                    liveDetails != null &&
+                        liveDetails.actualStartTime != null &&
+                        liveDetails.actualEndTime == null
+                }
 
-            if (liveVideo != null) {
-                LiveCheckResult.Live(
-                    videoId = liveVideo.id ?: "",
-                    title = liveVideo.snippet?.title ?: "",
-                    viewers = liveVideo.liveStreamingDetails?.concurrentViewers,
-                )
-            } else {
-                LiveCheckResult.NotLive
+                if (liveVideo != null) {
+                    LiveCheckResult.Live(
+                        videoId = liveVideo.id ?: "",
+                        title = liveVideo.snippet?.title ?: "",
+                        viewers = liveVideo.liveStreamingDetails?.concurrentViewers,
+                    )
+                } else {
+                    LiveCheckResult.NotLive
+                }
+            } catch (e: Exception) {
+                LiveCheckResult.Error(e.message ?: "Unknown error")
             }
-        } catch (e: Exception) {
-            LiveCheckResult.Error(e.message ?: "Unknown error")
         }
-    }
 
     /**
      * Close the OkHttp client and release resources.

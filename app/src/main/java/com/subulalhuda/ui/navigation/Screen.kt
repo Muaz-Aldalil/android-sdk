@@ -1,5 +1,6 @@
 package com.subulalhuda.ui.navigation
 
+import android.net.Uri
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MenuBook
@@ -55,8 +56,10 @@ sealed class Screen(val route: String) {
         fun createRoute(gameId: String) = "game/$gameId"
     }
 
-    data object YouTubePlayer : Screen("video/{videoId}") {
-        fun createRoute(videoId: String) = "video/$videoId"
+    data object YouTubePlayer : Screen("video/{videoId}?title={title}") {
+        fun createRoute(videoId: String, title: String? = null): String =
+            if (title.isNullOrBlank()) "video/$videoId"
+            else "video/$videoId?title=${Uri.encode(title)}"
     }
 
     data object Search : Screen("search")
