@@ -14,13 +14,18 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'temurin'
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v4
+        with:
+          # The action's default `tools platform-tools` fails: Google removed
+          # the `tools` package from the SDK repository. platform-tools is all
+          # we need here; Gradle auto-downloads platforms/build-tools.
+          packages: platform-tools
 
       - name: Accept licenses
         run: yes | sdkmanager --licenses
